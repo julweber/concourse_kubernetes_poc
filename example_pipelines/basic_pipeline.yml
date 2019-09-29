@@ -24,12 +24,14 @@ jobs:
     public: true
     serial: true
     plan:
-      - get: every-10m
-        trigger: true
-      - get: gitresource
-        trigger: true
-      - get: concourse-kubernetes-poc-repo
-        trigger: true
+      - do:
+        - get: every-10m
+          trigger: true
+        - in_parallel:
+          - get: gitresource
+            trigger: true
+          - get: concourse-kubernetes-poc-repo
+            trigger: true
       - task: ls-dir
         config:
           platform: linux
