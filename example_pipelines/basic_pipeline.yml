@@ -3,11 +3,13 @@
 resources:
 - name: gitresource
   type: git
+  check_every: 12h
   source:
     uri: https://github.com/julweber/dudebox
     branch: master
 - name: concourse-kubernetes-poc-repo
   type: git
+  check_every: 12h
   source:
     uri: https://github.com/julweber/concourse_kubernetes_poc
     branch: master
