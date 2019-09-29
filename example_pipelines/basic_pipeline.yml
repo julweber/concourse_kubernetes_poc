@@ -38,7 +38,7 @@ jobs:
             path: sh
             args:
               - -exc
-              - ls -la .; ls -la /tmp/build/get
+              - ls -la .
       - task: hello-world
         config:
           platform: linux
