@@ -54,7 +54,7 @@ concourse:
   web:
     ## A name for this Concourse cluster, to be displayed on the dashboard page.
     ##
-    clusterName: agforcedev
+    clusterName: dudecourse
 
     ## The maximum number of open connections for a connection pool
     ##
