@@ -6,6 +6,11 @@ resources:
   source:
     uri: https://github.com/julweber/dudebox
     branch: master
+- name: concourse-kubernetes-poc-repo
+  type: git
+  source:
+    uri: https://github.com/julweber/concourse_kubernetes_poc
+    branch: master
 - name: every-10m
   type: time
   icon: clock-outline
@@ -20,6 +25,8 @@ jobs:
       - get: every-10m
         trigger: true
       - get: gitresource
+        trigger: true
+      - get: concourse-kubernetes-poc-repo
         trigger: true
       - task: ls-dir
         config:
@@ -46,7 +53,7 @@ jobs:
     public: true
     serial: true
     plan:
-      - get: gitresource
+      - get: concourse-kubernetes-poc-repo
         passed:
           - first-job
       - task: dig-google-de
