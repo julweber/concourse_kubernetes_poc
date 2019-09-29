@@ -1,0 +1,61 @@
+---
+
+resources:
+- name: gitresource
+  type: git
+  source:
+    uri: https://github.com/julweber/dudebox
+    branch: master
+- name: every-10m
+  type: time
+  icon: clock-outline
+  source:
+    interval: 10m
+
+jobs:
+  - name: first-job
+    public: true
+    serial: true
+    plan:
+      - get: every-10m
+        trigger: true
+      - get: gitresource
+        trigger: true
+      - task: ls-dir
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: julianweberdev/dudebox}
+          run:
+            path: sh
+            args:
+              - -exc
+              - ls -la
+      - task: hello-world
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: julianweberdev/dudebox}
+          run:
+            path: echo
+            args: [hello world]
+
+  - name: second-job
+    public: true
+    serial: true
+    plan:
+      - get: gitresource
+        passed:
+          - first-job
+      - task: dig-google-de
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: {repository: julianweberdev/dudebox}
+          run:
+            path: dig
+            args: [www.google.de]
+          
