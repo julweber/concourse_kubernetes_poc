@@ -1,6 +1,12 @@
 # Concourse kubernetes setup and POC
 
 This repository contains configuration and instructions for setting up concourse ci on a kubernetes cluster.
+Please follow the instructions below to setup the POC on your cluster.
+
+# Prerequisites
+- Running Kubernetes cluster with kubectl already logged in
+- helm installation running on the Kubernetes cluster
+- fly cli (can be downloaded directly from the installed concourse UI)
 
 # Setup
 
