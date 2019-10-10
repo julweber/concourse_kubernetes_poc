@@ -29,7 +29,7 @@ helm upgrade $DEPLOYMENT_NAME stable/concourse --values values.yaml
 
 # Use fly cly for configuration
 ```
-export ENDPOINT="http://concourse.yourdomain.com/"
+export ENDPOINT="https://concourse.yourdomain.com/"
 
 # login
 fly -t concoursedev login -c $ENDPOINT
