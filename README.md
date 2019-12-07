@@ -13,17 +13,32 @@ Please follow the instructions below to setup the POC on your cluster.
 ```
 DEPLOYMENT_NAME="concoursedev"
 
+# add repo
+helm repo add concourse https://concourse-charts.storage.googleapis.com/
+
+# inspect helm values
+helm inspect values concourse/concourse > values.yaml
+
+# edit config
+vim values.yaml
+
+# TODO: generate certificates
+
+# install helm chart
+helm install concourse/concourse --name $DEPLOYMENT_NAME --values values.yaml
+
+# get status
+helm status $DEPLOYMENT_NAME
+
+
 # configure and install certificate for ssl termination
 cp certificate.yaml.example certificate.yaml
 nano certificate.yaml
 kubectl apply -f certificate.yaml
 
-# configure and install concourse with helm and settings from values.yaml
-cp values.yaml.example values.yaml
-helm install --name $DEPLOYMENT_NAME stable/concourse --values values.yaml
 
 # update new settings when changing or update to new release
-helm upgrade $DEPLOYMENT_NAME stable/concourse --values values.yaml
+helm upgrade $DEPLOYMENT_NAME concourse/concourse --values values.yaml
 ```
 
 

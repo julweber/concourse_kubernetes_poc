@@ -19,7 +19,7 @@ image: concourse/concourse
 ##      of `concourse/concourse`.
 ## Ref: https://hub.docker.com/r/concourse/concourse/tags/
 ##
-imageTag: "5.5.0"
+imageTag: "5.6.0"
 
 ## Specific image digest to use in place of a tag.
 ## Ref: https://kubernetes.io/docs/concepts/configuration/overview/#container-images
@@ -54,7 +54,7 @@ concourse:
   web:
     ## A name for this Concourse cluster, to be displayed on the dashboard page.
     ##
-    clusterName: dudecourse
+    clusterName:
 
     ## The maximum number of open connections for a connection pool
     ##
@@ -64,6 +64,19 @@ concourse:
     ## Ref: https://concourse-ci.org/global-resources.html
     ##
     enableGlobalResources: true
+
+    ## The Future™ of resource checking.
+    ##
+    enableLidar:
+
+    ## Interval on which the resource scanner will run to see if new checks need
+    ## to be scheduled.
+    ##
+    lidarScannerInterval:
+
+    ## Interval on which the resource checker runs any scheduled checks.
+    ##
+    lidarCheckerInterval:
 
     ## Enable auditing for all api requests connected to builds.
     ##
@@ -101,6 +114,10 @@ concourse:
     ##
     enableVolumeAuditing: false
 
+    ## Enable redacting secrets in build logs.
+    ##
+    enableRedactSecrets:
+
     ## The number of attempts secret will be retried to be fetched,
     ## in case a retryable error happens.
     ##
@@ -119,6 +136,11 @@ concourse:
     ## is smaller).
     ##
     secretCacheDuration:
+
+    ## If the cache is enabled, secret not found responses will be cached for
+    ## this duration.
+    ##
+    secretCacheDurationNotFound:
 
     ## If the cache is enabled, expired items will be removed on this internal.
     ##
@@ -156,7 +178,7 @@ concourse:
     ##
     ## Example: http://ci.concourse-ci.org
     ##
-    externalUrl: http://concourse.yourdomain.com
+    externalUrl:
 
     encryption:
       ## Enable encryption of pipeline configuration. Encryption keys can be set via secrets
@@ -230,6 +252,11 @@ concourse:
     ## Log database queries.
     ##
     logDbQueries: false
+
+    ## Log cluster name.
+    ##
+    logClusterName:
+
 
     ## Interval on which to run build tracking.
     ##
@@ -619,6 +646,10 @@ concourse:
       ## went missing from the worker.
       ##
       missingGracePeriod: 5m
+
+      ## Period after which to reap checks that are completed.
+      ##
+      checkRecyclePeriod:
 
     syslog:
       ## Enables the emission of build logs to external log ingesters through
@@ -1464,19 +1495,14 @@ web:
   ingress:
     ## Enable Ingress.
     ##
-    enabled: true
+    enabled: false
 
     ## Annotations to be added to the web ingress.
     ## Example:
     ##   kubernetes.io/ingress.class: nginx
     ##   kubernetes.io/tls-acme: 'true'
     ##
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/proxy-body-size: 50m
-      ingress.kubernetes.io/proxy-body-size: 50m
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      certmanager.k8s.io/cluster-issuer: letsencrypt-staging      
+    annotations: {}
 
     ## Hostnames.
     ## Must be provided if Ingress is enabled.
@@ -1484,7 +1510,6 @@ web:
     ##   - concourse.domain.com
     ##
     hosts:
-      - concourse.yourdomain.com
 
     ## TLS configuration.
     ## Secrets must be manually created in the namespace.
@@ -1494,9 +1519,6 @@ web:
     ##       - concourse.domain.com
     ##
     tls:
-    - hosts: 
-      - concourse.yourdomain.com
-      secretName: cert-concourse
 
 ## Configuration values for Concourse Worker components.
 ## For more information regarding the characteristics of
@@ -1740,7 +1762,7 @@ postgresql:
   ## PostgreSQL Password for the new user.
   ## If not set, a random 10 characters password will be used.
   ##
-  postgresqlPassword: concourse-dev
+  # postgresqlPassword: concourse
 
   ## PostgreSQL Database to create.
   ##
@@ -1817,7 +1839,7 @@ secrets:
 
   ## List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users.
   ##
-  localUsers: "admin:test123"
+  localUsers: "admin:admin"
 
   ## The TLS certificate and private key for the web component to be able to terminate
   ## TLS connections.
